@@ -1,0 +1,21 @@
+pool:
+name: Hosted Ubuntu 1604
+demands: npm
+steps:
+- task: Npm@1
+displayName: 'npm install'
+inputs:
+verbose: false
+- task: Npm@1
+displayName: 'npm run build'
+inputs:
+command: custom
+verbose: false
+customCommand: 'run build'
+- task: CopyFiles@2
+displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
+inputs:
+SourceFolder: '$(System.DefaultWorkingDirectory)/build'
+TargetFolder: '$(Build.ArtifactStagingDirectory)'
+- task: PublishBuildArtifacts@1
+displayName: 'Publish Artifact: drop'
