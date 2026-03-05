@@ -1,0 +1,30 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest' # Use the latest Ubuntu agent image
+
+variables:
+  nodeVersion: '20.x' # Define the Node.js version to use
+
+steps:
+# Install Node.js
+- task: UseNode@1
+  inputs:
+    version: $(nodeVersion)
+  displayName: 'Install Node.js version $(nodeVersion)'
+
+# Install dependencies
+- script: npm install
+  displayName: 'Install dependencies'
+
+# Run tests
+- script: npm test
+  displayName: 'Run tests'
+
+# Publish pipeline artifact
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: '$(System.DefaultWorkingDirectory)'
+    artifactName: 'drop'
+  displayName: 'Publish artifact'
